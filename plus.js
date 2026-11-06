@@ -88,3 +88,5 @@ Object.assign(window,{CT:CT,SQ:'',wAdd,wSend,wPin,wFrz,wOut,shReg,shAdd,shEdit,s
 Object.defineProperty(window,'CT',{get:()=>CT,set:v=>CT=v});Object.defineProperty(window,'SQ',{get:()=>SQ,set:v=>SQ=v});Object.defineProperty(window,'JQ',{get:()=>JQ,set:v=>JQ=v});
 const h0=hd;hd=function(){h0();const n=$('#nav');if(n)n.insertAdjacentHTML('beforeend',[['wallet','💳','Wallet'],['shop','🛍️','Shop'],['jobs','💼','Jobs'],['lgu','🏛️','LGU']].map(x=>`<button class="${cur==x[0]?'on':''}" onclick="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join(''))};hd();
 })();
+/* Tip bar when the phone browser is stuck in "Desktop site" mode */
+addEventListener('load',()=>{if(screen.width<=600&&innerWidth>=800&&!navigator.standalone){const d=document.createElement('div');d.style.cssText='position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:99;background:#f59e0b;color:#000;font:700 22px system-ui;padding:14px;text-align:center';d.innerHTML='⚠️ Naka-Desktop site ang browser. Tap ⋮ menu → alisin ang check sa "Desktop site". <u onclick="this.parentNode.remove()">OK</u>';document.body.appendChild(d)}});

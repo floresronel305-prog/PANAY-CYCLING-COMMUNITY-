@@ -1,0 +1,48 @@
+/* pro.css – PRO UI layer (loaded after style.css). Tokens, animated background, toasts, notification center, ripple, floating nav. */
+:root{--ease:cubic-bezier(.22,1,.36,1);--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--glass:color-mix(in srgb,var(--c),transparent 28%)}
+#bgfx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.shell{position:relative;z-index:1}
+body{background:var(--bg)!important}
+/* header: bell */
+#bell{position:relative;margin-left:auto;width:40px;height:40px;border-radius:14px;border:1px solid color-mix(in srgb,#fff,transparent 86%);background:var(--glass);color:var(--t);font-size:18px;cursor:pointer;display:grid;place-items:center;transition:transform .2s var(--ease)}
+#bell:active{transform:scale(.9)}#bell.ring span{animation:ring .8s var(--ease)}
+#bell i{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font:700 11px/18px system-ui;font-style:normal;text-align:center;padding:0 4px;box-shadow:0 0 0 2px var(--hd)}
+#bell i:empty,#bell i[data-n="0"]{display:none}
+#acct{margin-left:0!important}
+@keyframes ring{20%{transform:rotate(18deg)}40%{transform:rotate(-16deg)}60%{transform:rotate(10deg)}80%{transform:rotate(-6deg)}}
+/* toast stack */
+#toast{display:none!important}
+#toasts{position:fixed;left:0;right:0;top:calc(66px + env(safe-area-inset-top,0px));z-index:120;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 12px}
+.tt{pointer-events:auto;position:relative;overflow:hidden;width:100%;max-width:420px;display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:16px;color:var(--t);background:var(--glass);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border:1px solid color-mix(in srgb,#fff,transparent 84%);box-shadow:0 12px 34px #0006;animation:tin .45s var(--ease);touch-action:pan-y;transition:transform .3s var(--ease),opacity .3s}
+.tt::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--k,var(--a))}
+.tt .ti{font-size:20px;flex:none}.tt .tx{flex:1;min-width:0;font-size:13.5px;line-height:1.35}.tt .tx b{display:block;font-size:14px}
+.tt .tp{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--k,var(--a));transform-origin:left;animation:tp var(--d,3.2s) linear forwards;opacity:.8}
+.tt.ok{--k:var(--ok)}.tt.err{--k:var(--bad)}.tt.sos{--k:var(--bad);background:color-mix(in srgb,var(--bad),#000 55%);color:#fff;animation:tin .45s var(--ease),sos 1s ease 3}
+.tt.out{opacity:0;transform:translateY(-14px) scale(.96)}
+@keyframes tin{from{opacity:0;transform:translateY(-18px) scale(.94)}}@keyframes tp{to{transform:scaleX(0)}}@keyframes sos{50%{box-shadow:0 0 0 6px #ef444466,0 12px 34px #0006}}
+/* notification center */
+#npw{position:fixed;inset:0;z-index:110;background:#0007;opacity:0;pointer-events:none;transition:opacity .25s}
+#npw.on{opacity:1;pointer-events:auto}
+#npp{position:absolute;right:10px;left:10px;max-width:440px;margin-left:auto;top:calc(62px + env(safe-area-inset-top,0px));max-height:72vh;display:flex;flex-direction:column;border-radius:22px;background:var(--c);border:1px solid color-mix(in srgb,#fff,transparent 86%);box-shadow:0 24px 60px #0008;transform:translateY(-12px) scale(.97);opacity:0;transition:transform .35s var(--ease),opacity .25s;overflow:hidden}
+#npw.on #npp{transform:none;opacity:1}
+.nh{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--b)}.nh b{flex:1;font-size:16px}
+.nl{overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch}
+.ni{display:flex;gap:10px;padding:10px;border-radius:14px;cursor:pointer;transition:background .2s;position:relative}.ni:hover{background:#ffffff0d}
+.ni.u::after{content:"";position:absolute;right:10px;top:14px;width:8px;height:8px;border-radius:50%;background:var(--a)}
+.ni .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:color-mix(in srgb,var(--k,var(--a)),transparent 78%);flex:none}
+.ni b{font-size:13.5px;display:block;padding-right:16px}.ni .mut{font-size:12px}
+.ne{text-align:center;padding:30px 10px;color:var(--m)}.ne div{font-size:40px}
+.nf{display:flex;gap:8px;padding:10px;border-top:1px solid var(--b)}.nf .btn{flex:1;min-height:38px;padding:8px;font-size:13px}
+/* ripple + press */
+.btn,.chip,nav button,.rc,.sc{position:relative;overflow:hidden;-webkit-user-select:none;user-select:none}
+.rip{position:absolute;border-radius:50%;background:#ffffff55;transform:scale(0);animation:rip .6s var(--ease);pointer-events:none}@keyframes rip{to{transform:scale(1);opacity:0}}
+.rc:active,.sc:active,.card.h:active{transform:scale(.98)}
+/* floating glass nav */
+nav{left:10px!important;right:10px!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;border-radius:24px!important;border:1px solid color-mix(in srgb,#fff,transparent 84%)!important;padding:6px!important;box-shadow:0 14px 40px #0006!important;background:color-mix(in srgb,var(--c),transparent 22%)!important}
+nav button.on{background:linear-gradient(135deg,color-mix(in srgb,var(--a),transparent 70%),color-mix(in srgb,var(--a),transparent 88%))!important}
+nav button{position:relative}nav button .dot{position:absolute;top:3px;right:14px;width:10px;height:10px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 2px var(--c);animation:pop .3s}
+.shell{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffff26 48%,transparent 66%);transform:translateX(-100%);animation:sheen 6s ease-in-out infinite;pointer-events:none}@keyframes sheen{60%,100%{transform:translateX(100%)}}
+.card,.rc,.sc{backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3)}
+.rv{transition:opacity .6s var(--ease),transform .6s var(--ease)}
+@media(prefers-reduced-motion:reduce){.hero::after,.tt,.tt .tp{animation:none!important}}
