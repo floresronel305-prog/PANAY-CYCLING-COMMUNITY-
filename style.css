@@ -51,3 +51,44 @@ label{font-size:12px;color:var(--m)}.row{display:flex;gap:8px;flex-wrap:wrap;ali
 .lv{width:36px;height:36px;border-radius:50%;background:var(--a);color:#fff;display:grid;place-items:center;font-weight:800;border:3px solid #fff;box-shadow:0 2px 8px #0006;margin:0 auto}.lv.ad{background:#e11d48}.lv.mi{box-shadow:0 0 0 4px #22c55e88,0 2px 8px #0006}.lv.s{width:30px;height:30px;font-size:13px}
 .lvn{background:#0f172ae6;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;text-align:center;margin-top:2px;white-space:nowrap}
 .ft{margin:22px 0 10px;text-align:center;font-size:11px;color:var(--m)}.ft a{color:var(--a);cursor:pointer;text-decoration:underline}
+
+/* ===== Mobile app layout: bottom tab bar, single column (no desktop sidebar) ===== */
+html,body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.shell{display:block!important;max-width:720px;padding:10px 10px calc(76px + env(safe-area-inset-bottom,0px))}
+nav{position:fixed!important;top:auto!important;left:0;right:0;bottom:0;z-index:30;flex-direction:row!important;gap:2px;border-radius:18px 18px 0 0;border-width:1px 0 0;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:color-mix(in srgb,var(--c),transparent 12%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;min-width:62px;flex-direction:column!important;align-items:center;gap:2px!important;padding:6px 8px!important;font-size:10px!important;text-align:center;white-space:nowrap}
+nav button span{font-size:20px;transition:transform .25s}
+nav button.on span{transform:translateY(-3px) scale(1.2)}
+nav button.on{background:color-mix(in srgb,var(--a),transparent 80%)!important;color:var(--a)!important}
+#toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.card,.rc,.sc{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn,.chip,nav button{min-height:40px}
+
+/* ===== PRO UI polish: glassmorphism, app bar, gradient cards ===== */
+:root{--r:18px;--sh:0 8px 28px #0003}
+body{background:radial-gradient(900px 500px at 85% -10%,color-mix(in srgb,var(--a),transparent 72%),transparent),radial-gradient(700px 500px at -10% 40%,color-mix(in srgb,var(--a),transparent 85%),transparent),var(--bg);background-attachment:fixed;font-size:15px;letter-spacing:.1px;-webkit-font-smoothing:antialiased}
+header{background:color-mix(in srgb,var(--hd),transparent 15%);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid color-mix(in srgb,var(--b),transparent 40%);padding:10px 14px}
+.lg{border-radius:12px;box-shadow:0 0 0 2px color-mix(in srgb,var(--a),transparent 50%)}
+.ttl{font-size:11px;letter-spacing:.8px}
+.card,.rc,.sc,.md{background:color-mix(in srgb,var(--c),transparent 22%);border:1px solid color-mix(in srgb,#fff,transparent 88%);border-radius:var(--r);box-shadow:var(--sh)}
+:root[data-theme=light] .card,:root[data-theme=light] .rc,:root[data-theme=light] .sc{border-color:var(--b)}
+.btn{border-radius:14px;padding:11px 16px;font-weight:700;background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a),#000 28%));box-shadow:0 6px 16px color-mix(in srgb,var(--a),transparent 65%);letter-spacing:.2px}
+.btn:active{transform:scale(.96)}.btn.g{background:transparent;box-shadow:none;border:1px solid var(--b)}.btn.r{background:linear-gradient(135deg,#ef4444,#b91c1c);box-shadow:0 6px 16px #ef444455}
+.chip{border-radius:999px;padding:6px 12px;font-weight:600}
+.chip.on{background:var(--a);box-shadow:0 4px 12px color-mix(in srgb,var(--a),transparent 60%)}
+input,select{border-radius:14px;padding:12px 14px;background:color-mix(in srgb,var(--bg),transparent 25%);transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a),transparent 75%)}
+h2{font-size:20px;font-weight:800;letter-spacing:-.2px;color:var(--t)}.sh{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--m);margin-top:20px}
+.hero{border-radius:24px;box-shadow:0 14px 36px color-mix(in srgb,var(--a),transparent 60%)}
+.big{letter-spacing:-.5px}
+nav{box-shadow:0 -8px 30px #0004}
+nav button{border-radius:14px;font-weight:700}
+nav button.on::after{content:"";width:18px;height:3px;border-radius:3px;background:var(--a);margin-top:2px}
+/* Wallet balance card (first card under the Wallet title) */
+#px>h2+.card{background:linear-gradient(135deg,var(--a),color-mix(in srgb,var(--a),#000 55%) 70%,#0b1020);color:#fff;padding:20px;border:0;position:relative;overflow:hidden;min-height:140px}
+#px>h2+.card::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:#ffffff1f}
+#px>h2+.card .big{color:#fff;font-size:34px}#px>h2+.card .mut{color:#ffffffc0}
+.rv{transition:opacity .5s,transform .5s}
+main>*,#px>*{animation:up .35s both}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
