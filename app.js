@@ -7,7 +7,31 @@ const BD=[[0,'🚲','Rookie'],[50,'🥉','Bronze Rider'],[200,'🥈','Silver Rid
 const LAND=[[121.93,11.93],[122.25,11.88],[122.5,11.72],[122.8,11.62],[123,11.6],[123.15,11.5],[123.15,11.25],[123.05,11.05],[122.85,10.88],[122.6,10.75],[122.55,10.65],[122.4,10.5],[122.1,10.43],[121.95,10.6],[121.93,10.9],[121.93,11.2],[121.9,11.5],[121.9,11.75]];
 const R=[[[122.56,10.72],[122.53,10.82],[122.64,10.95],[122.64,11.11],[122.69,11.26],[122.72,11.45],[122.75,11.58],[122.55,11.66],[122.37,11.71],[122.2,11.8],[121.96,11.92]],[[122.56,10.72],[122.23,10.64],[121.99,10.75],[121.98,11],[121.98,11.28],[121.99,11.5],[122,11.72],[121.96,11.92]]];
 const TOWNS=[['Iloilo',122.56,10.72],['Roxas',122.75,11.58],['Kalibo',122.37,11.71],['San Jose',121.99,10.75],['Caticlan',121.95,11.92],['Pototan',122.64,10.95],['Passi',122.64,11.11],['Dumarao',122.69,11.26],['Miagao',122.23,10.64],['Culasi',121.98,11.43],['Estancia',123.15,11.46],['Ibajay',122.2,11.8],['Tapaz',122.53,11.27]];
-let pid=0;const P=(t,n,lng,lat,d,i)=>({id:++pid,t,n,lng,lat,d,i});
+let pid=0;const P=(t,n,lng,lat,d,i,w)=>({id:++pid,t,n,lng,lat,d,i,w});
+/* built-in tourist spots: [name, lng, lat, description, emoji, Wikipedia title used for the photo] */
+const BT=[
+['Boracay Island',121.92,11.96,'White-sand paradise. Ferry from Caticlan jetty.','🏝️','Boracay'],
+['White Beach, Boracay',121.9235,11.9635,'Famous powdery white beach with sunset views.','🏖️','White Beach, Boracay'],
+['Puka Shell Beach',121.9165,11.9975,'Quieter beach at the north tip of Boracay.','🐚','Puka Shell Beach'],
+['Bugtong Bato Falls',122.17,11.8,'Multi-tier falls in Ibajay, Aklan.','💦','Bugtong Bato Falls'],
+['Jawili Falls',122.32,11.79,'Cascading falls and cool pools in Tangalan, Aklan.','💧','Jawili Falls'],
+['Bakhawan Eco-Park',122.38,11.69,'Mangrove forest bike trail in Kalibo.','🌳','Bakhawan Eco-Park'],
+['Ati-Atihan, Kalibo',122.37,11.7075,'Home of the famous Ati-Atihan festival every January.','🎭','Ati-Atihan Festival'],
+['Roxas City Seafood Capital',122.75,11.58,'Capiz’s seafood hub and Sta. Monica church.','🦐','Roxas City'],
+['Baybay Beach, Roxas',122.7437,11.6016,'Sunset beach strip with seafood stalls.','🌅','Baybay Beach, Roxas City'],
+['Pan-ay Church',122.79,11.58,'Historic Capiz church famous for its giant bell.','🔔','Pan-ay Church'],
+['Carles & Gigantes Gateway',123.13,11.57,'Port town to Gigantes and Sicogon islands.','⛵','Carles, Iloilo'],
+['Sicogon Island',123.21,11.61,'Island getaway with white beaches off Carles.','🏝️','Sicogon Island'],
+['Jaro Cathedral',122.56,10.73,'Historic Iloilo cathedral and belfry.','⛪','Jaro Cathedral'],
+['Molo Church',122.5445,10.6968,'Known as the Feminist Church for its all-female saints.','⛪','Molo Church'],
+['Iloilo River Esplanade',122.5585,10.7035,'Scenic riverside bike and jogging path.','🌇','Iloilo River Esplanade'],
+['Calle Real, Iloilo',122.5655,10.6955,'Heritage street lined with old Iloilo buildings.','🏛️','Calle Real, Iloilo'],
+['Miagao Church',122.23,10.64,'UNESCO World Heritage baroque church.','⛪','Miagao Church'],
+['Garin Farm',122.09,10.59,'Hilltop pilgrim site in San Joaquin.','🌿','Garin Farm'],
+['San Joaquin Church',122.0872,10.5899,'Fortress church with a famous battle relief on its façade.','⛪','San Joaquin Church'],
+['Anini-y Church',121.93,10.4333,'Coastal Spanish-era church in southern Antique.','⛪','Anini-y Church'],
+['Tibiao Fish Spa',122.03,11.29,'Fish spa and river tubing area in Tibiao, Antique.','🐟','Tibiao, Antique'],
+['Mt. Madja-as',122.05,11.43,'Highest peak of Panay, Antique.','⛰️','Mount Madja-as']];
 const seed=()=>({users:[{id:1,key:'email:admin@panaybike.ph',name:'Panay Admin',email:'admin@panaybike.ph',pw:'admin123',role:'admin',km:620,rides:34,j:Date.now()},{id:2,key:'email:maria@gmail.com',name:'Maria Santos',email:'maria@gmail.com',pw:'member123',role:'member',km:245,rides:18,j:Date.now()},{id:3,key:'email:juan@gmail.com',name:'Juan Dela Cruz',email:'juan@gmail.com',pw:'member123',role:'member',km:85,rides:7,j:Date.now()}],me:null,recent:[],th:0,mode:'auto',
 ann:[{t:'Welcome to PanayBike! Sunday group ride: Iloilo to Miagao, 6 AM at Plaza Libertad.',d:new Date().toLocaleDateString()}],
 pois:[P('tour','Boracay Island',121.92,11.96,'White-sand paradise. Ferry from Caticlan jetty.','🏝️'),P('tour','Bugtong Bato Falls',122.17,11.8,'Multi-tier falls in Ibajay, Aklan.','💦'),P('tour','Bakhawan Eco-Park',122.38,11.69,'Mangrove forest bike trail in Kalibo.','🌳'),P('tour','Roxas City Seafood Capital',122.75,11.58,'Capiz’s seafood hub and Sta. Monica church.','🦐'),P('tour','Carles & Gigantes Gateway',123.13,11.57,'Port town to Gigantes and Sicogon islands.','⛵'),P('tour','Jaro Cathedral',122.56,10.73,'Historic Iloilo cathedral and belfry.','⛪'),P('tour','Miagao Church',122.23,10.64,'UNESCO World Heritage baroque church.','⛪'),P('tour','Garin Farm',122.09,10.59,'Hilltop pilgrim site in San Joaquin.','🌿'),P('tour','Mt. Madja-as',122.05,11.43,'Highest peak of Panay, Antique.','⛰️'),
@@ -17,7 +41,7 @@ P('vulc','Sta. Barbara Vulcanizing',122.53,10.83,'Tube patching and tire repair.
 P('bike','Iloilo Bike Hub',122.57,10.7,'Parts, tune-ups and rentals.'),P('bike','Kalibo Pedal Works',122.38,11.7,'Full service bike shop.'),P('bike','Roxas Cycle Shop',122.74,11.6,'Road and MTB parts.'),P('bike','Antique Bike Depot',121.99,10.78,'Spare tubes and chains.')]});
 let mem,D;const ld=()=>{try{return JSON.parse(localStorage.getItem('pbc'))}catch(e){return mem}};
 const sv=()=>{try{localStorage.setItem('pbc',JSON.stringify(D))}catch(e){mem=D}};
-D=ld()||seed();D.chat=D.chat||[{u:1,n:'Panay Admin',x:'Welcome riders! Share your rides here.',t:'now'}];D.photos=D.photos||[];pid=Math.max(0,...D.pois.map(p=>p.id));
+D=ld()||seed();D.chat=(D.chat||[{u:1,n:'Panay Admin',r:'admin',x:'Welcome riders! Share your rides here.',t:Date.now()}]).map((m,i,a)=>({...m,t:typeof m.t=='number'?m.t:Date.now()-(a.length-i)*60000,k:m.k||'m'+i}));D.photos=D.photos||[];pid=Math.max(0,...D.pois.map(p=>p.id));
 const me=()=>D.users.find(u=>u.id==D.me);
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
 function theme(){const u=me(),i=u&&u.th!=null?u.th:D.th,m=(u&&u.mode)||D.mode||'auto';document.documentElement.style.setProperty('--a',C[i][1]);document.documentElement.dataset.theme=m=='light'?'light':''}
@@ -28,6 +52,8 @@ function hd(){const u=me(),v=[['home','🏠','Home'],['map','🗺️','Map'],['c
 $('#nav').innerHTML=v.map(x=>`<button class="${cur==x[0]?'on':''}" onclick="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join('');
 $('#acct').innerHTML=u?`<span class="nm">${E(u.name.split(' ')[0])}</span><span onclick="go('club')" style="cursor:pointer">${av(u,'s')}</span>`:`<button class="btn" onclick="auth('login')">Log in</button>`}
 let cur='home',flt='all',sel=null,hl=null;
+/* declared up here so go() can use them on first load (they were declared after go('home') ran, which crashed the app before the map could start) */
+let LW=null,lvT=null,lvL=null,lastP=0,MY=null,LVD={},chT=null,chSig='';
 const RS=[[[122.56,10.72],[122.47,10.68],[122.38,10.66],[122.31,10.65],[122.23,10.64],[122.1,10.6]],[[121.99,10.75],[122.2,10.85],[122.35,10.85],[122.53,10.82]],[[122.64,11.11],[122.53,11.1],[122.4,11.05]],[[122.69,11.26],[122.53,11.27],[122.4,11.3]],[[122.75,11.58],[122.6,11.5],[122.53,11.27]],[[122.75,11.58],[122.9,11.6],[123,11.55],[123.1,11.5]],[[123.1,11.5],[123.1,11.35],[123.05,11.2],[122.95,11.05],[122.8,10.95],[122.64,10.95]],[[122.37,11.71],[122.4,11.6],[122.35,11.5],[122.2,11.45],[122.05,11.43],[121.98,11.43]],[[122.37,11.71],[122.33,11.71],[122.2,11.8]]];
 const S2=[['gas','Petron Pavia',122.55,10.78,'Highway north of Iloilo.'],['gas','Shell Sta. Barbara',122.535,10.815,'Open daily.'],['gas','Petron Passi',122.64,11.11,'Highway station.'],['gas','Caltex Tapaz',122.53,11.27,'Inland route fuel stop.'],['gas','Shell Altavas',122.4,11.6,'Kalibo–Culasi road.'],['gas','Petron Ibajay',122.2,11.8,'Aklan coastal highway.'],['gas','Phoenix Numancia',122.33,11.71,'Near Kalibo.'],['gas','Shell Estancia',123.15,11.46,'Northeast Iloilo.'],['gas','Petron Culasi',121.98,11.43,'Antique north route.'],['gas','Shell Tigbauan',122.38,10.67,'South coast road.'],['gas','Petron Pandan',121.99,11.72,'West route.'],
 ['store','Passi Public Market',122.64,11.11,'Fresh food, water, snacks.'],['store','Miagao Market',122.23,10.64,'Supplies near the church.'],['store','Estancia Mini Mart',123.14,11.45,'Water and snacks.'],['store','Culasi Sari-Sari Stop',121.98,11.42,'Cold drinks.'],
@@ -36,6 +62,8 @@ const S2=[['gas','Petron Pavia',122.55,10.78,'Highway north of Iloilo.'],['gas',
 ['food','La Paz Batchoy Stop',122.57,10.72,'Iloilo’s famous batchoy.'],['food','Capiz Seafood Carinderia',122.74,11.57,'Fresh seafood meals.'],['food','Kalibo Pancit Stop',122.37,11.7,'Local noodles and coffee.'],['food','Antique Kakanin Stop',121.99,10.76,'Rice cakes and snacks.'],['food','Passi Lutong Bahay',122.64,11.1,'Home-cooked meals.'],
 ['med','Iloilo City Hospital',122.56,10.7,'Emergency room open 24 hrs.'],['med','Roxas City Hospital',122.75,11.57,'Emergency care.'],['med','Kalibo Hospital',122.37,11.7,'Emergency care.'],['med','Antique Hospital',121.99,10.76,'Emergency care.'],['med','Passi Health Center',122.64,11.11,'First aid and clinic.']];
 D.pois=D.pois.filter(p=>p.t=='tour'||p.adm);
+/* merge built-in spots into saved data (keeps admin-uploaded photos, adds new spots for returning visitors) */
+BT.forEach(([n,lng,lat,d,i,w])=>{const p=D.pois.find(x=>x.t=='tour'&&!x.adm&&x.n==n);if(p)Object.assign(p,{lng,lat,d,i,w});else D.pois.push(P('tour',n,lng,lat,d,i,w))});
 const RT=[{n:'Iloilo – Miagao Heritage',c:'#ef4444',p:[[122.56,10.72],[122.4,10.67],[122.23,10.64]]},{n:'Roxas – Kalibo Coastal Road',c:'#22c55e',p:[[122.75,11.58],[122.55,11.66],[122.37,11.71]]},{n:'Kalibo – Caticlan (Boracay Gateway)',c:'#f59e0b',p:[[122.37,11.71],[122.2,11.8],[121.96,11.92]]},{n:'Iloilo – Passi – Roxas Highway',c:'#a855f7',p:R[0].slice(0,7)}];
 const rd=r=>r.p.reduce((a,q,i)=>i?a+hav(r.p[i-1],q):0,0)*1.2;
 const landD=()=>LAND.map((q,i)=>(i?'L':'M')+proj(...q).join(',')).join('')+'Z';
@@ -45,7 +73,7 @@ function mini(i){const r=RT[i],b=box(r.p,2,100);return`<svg viewBox="${b.join(' 
 function go(v){if(!me()&&['club','set','admin'].includes(v)){auth('login');return}if(v=='admin'&&me().role!='admin'){toast('Admins only');return}cur=v;hd();$('#v').innerHTML=V[v]();window.scrollTo(0,0);
 $$('[data-n]').forEach(e=>{const n=+e.dataset.n;let i=0;const t=setInterval(()=>{i+=Math.ceil(n/40);if(i>=n){i=n;clearInterval(t)}e.textContent=i.toLocaleString()},30)});
 const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');o.unobserve(e.target)}}));$$('.rv').forEach(e=>o.observe(e));
-clearInterval(lvT);if(v=='map')initMap();if(v=='home')loadTs()}
+clearInterval(lvT);clearInterval(chT);if(v=='map')initMap();if(v=='home')loadTs();if(v=='chat')initChat()}
 const sws=f=>`<div class="sws">${C.map((c,i)=>`<div class="sw ${f(i)?'on':''}" title="${c[0]}" style="background:${c[1]}" onclick="setTh(${i})"></div>`).join('')}</div>`;
 function setTh(i){const u=me();if(cur=='admin')D.th=i;else if(u)u.th=i;else D.th=i;sv();theme();go(cur);toast(C[i][0]+' theme applied')}
 const V={
@@ -67,7 +95,7 @@ return`<div class="w"><h2 style="margin-top:4px">Admin panel</h2><div class="gri
 <h2>Members</h2><div class="card tb"><table><tr><th>Name</th><th>Role</th><th>km</th><th>Actions</th></tr>${D.users.map(u=>`<tr><td>${E(u.name)}</td><td>${u.role}</td><td>${u.km.toFixed(0)}</td><td><button class="chip" onclick="adm(${u.id},'role')">Toggle role</button> <button class="chip" onclick="adm(${u.id},'km')">+50 km</button> ${u.id==D.me?'':`<button class="chip" onclick="adm(${u.id},'del')">Delete</button>`}</td></tr>`).join('')}</table></div>
 <h2>Add map location</h2><div class="card"><input id="pn" placeholder="Name"><select id="pt">${Object.keys(T).map(k=>`<option value="${k}">${T[k][0]}</option>`).join('')}</select><div class="row"><input id="pla" type="number" step="any" placeholder="Latitude e.g. 10.72"><input id="plo" type="number" step="any" placeholder="Longitude e.g. 122.56"></div><input id="pd" placeholder="Description"><button class="btn" onclick="addPoi()">Add to map</button><div class="mut" style="margin-top:6px">To add a picture, open the pin on the map and upload.</div></div>
 <h2>Post announcement</h2><div class="card"><input id="an" placeholder="Message to all members"><button class="btn" onclick="addAnn()">Publish</button></div></div>`},
-chat(){return`<h2>💬 Community chat</h2><div class="card"><div id="cb" style="max-height:52vh;overflow:auto">${D.chat.map(m=>`<div class="msg ${m.u==D.me?'me':''}"><b>${E(m.n)}</b> <span class="mut">${m.t}</span><div>${E(m.x)}</div></div>`).join('')}</div><div class="row" style="flex-wrap:nowrap;margin-top:8px"><input id="cm" placeholder="Type a message" onkeydown="if(event.key=='Enter')send()" style="margin:0"><button class="btn" style="flex:none" onclick="send()">Send</button></div></div>`},
+chat(){const u=me();return`<h2>💬 Community chat</h2><div class="card"><div class="mut" style="margin-bottom:6px">${LV()?'🟢 Live: all riders see these messages.':'⚠️ Messages are saved on this device only. Admin: add the Firebase link in config.js so all riders can chat together.'}</div><div id="cb" class="cb"><div class="mut">Loading messages…</div></div>${u?`<div class="row" style="flex-wrap:nowrap;margin-top:8px"><input id="cm" maxlength="500" autocomplete="off" placeholder="Type a message" onkeydown="if(event.key=='Enter')send()" style="margin:0"><button class="btn" style="flex:none" onclick="send()">Send</button></div>`:`<button class="btn" style="width:100%;margin-top:8px" onclick="auth('login')">Log in to join the chat</button>`}</div>`},
 photos(){const u=me();return`<div class="row" style="flex-wrap:nowrap"><h2 style="flex:3">📷 Ride photos</h2><button class="btn" style="flex:none" onclick="addPh()">Upload photo</button></div><div class="g2">${D.photos.map(p=>`<div class="ph rv"><img src="${p.src}" alt=""><div class="mut">${E(p.n)} ${u&&(u.id==p.u||u.role=='admin')?`<a style="cursor:pointer" onclick="delPh(${p.id})">🗑</a>`:''}</div></div>`).join('')||'<div class="mut">No photos yet. Be the first to share one!</div>'}</div>`},
 set(){const u=me();
 return`<div class="w"><h2 style="margin-top:4px">Settings</h2><div class="card"><b>Profile</b><label>Name</label><input id="sn" value="${E(u.name)}"><label>Phone</label><input id="sp" value="${E(u.phone||'')}"><button class="btn" onclick="saveP()">Save</button></div>
@@ -90,22 +118,25 @@ let map,LG={},ON={tour:1,gas:1,store:1,vulc:1,bike:1,med:1,food:0},PT=new Map(),
 const OVP=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
 const st=m=>{const h=$('#hud');if(h)h.textContent=m};
 const chips=()=>Object.keys(CAT).map(k=>`<span class="chip ${ON[k]?'on':''}" onclick="tog('${k}')">${CAT[k].i} ${CAT[k].n}</span>`).join('');
-const wiki=q=>WC[q]||(WC[q]=fetch('https://en.wikipedia.org/w/rest.php/v1/search/page?limit=1&q='+encodeURIComponent(q+' Philippines')).then(r=>r.json()).then(j=>{const k=j.pages&&j.pages[0]&&j.pages[0].key;return k?fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(k)).then(r=>r.json()):null}).catch(()=>null));
+/* Wikipedia photo + short text. ex=true: q is an exact page title (falls back to search). One request, CORS enabled. */
+const WQ='https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages|extracts&piprop=thumbnail&pithumbsize=600&exintro=1&explaintext=1&exsentences=2&exlimit=max';
+const wget=u=>fetch(WQ+u).then(r=>r.json()).then(j=>{const a=Object.values((j.query&&j.query.pages)||{}).filter(p=>!p.missing).sort((x,y)=>(x.index||0)-(y.index||0));return a.find(p=>p.thumbnail)||a[0]||null}).catch(()=>null);
+const wiki=(q,ex)=>{const k=(ex?'t:':'s:')+q;return WC[k]||(WC[k]=(ex?wget('&titles='+encodeURIComponent(q)):Promise.resolve(null)).then(r=>r&&r.thumbnail?r:wget('&generator=search&gsrlimit=4&gsrsearch='+encodeURIComponent(ex?q:q+' Philippines')).then(s=>(s&&s.thumbnail)?s:(r||s))))};
 function initMap(){if(map){map.remove();map=null}LG={};MK=new Map();map=L.map('lmap');
 const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}),sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}),drk=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'© OpenStreetMap © CARTO'});
 osm.addTo(map);L.control.layers({'Street':osm,'Satellite':sat,'Dark':drk}).addTo(map);
 Object.keys(ON).forEach(k=>{LG[k]=L.markerClusterGroup({disableClusteringAtZoom:16,chunkedLoading:true,maxClusterRadius:50});if(ON[k])map.addLayer(LG[k])});
 PT.forEach(o=>{if(!o.own)put(o)});
-D.pois.forEach(p=>{const o={id:'d'+p.id,lat:p.lat,lng:p.lng,k:CAT[p.t]?p.t:'tour',n:p.n,d:p.d,i:p.i,img:p.img,pid:p.id,own:1};PT.set(o.id,o);put(o)});
+D.pois.forEach(p=>{const o={id:'d'+p.id,lat:p.lat,lng:p.lng,k:CAT[p.t]?p.t:'tour',n:p.n,d:p.d,i:p.i,img:p.img,pid:p.id,own:1,w:p.w};PT.set(o.id,o);put(o)});
 mv?map.setView(mv.c,mv.z):map.fitBounds([[10.4,121.8],[12,123.3]]);
 map.on('moveend',()=>{mv={c:map.getCenter(),z:map.getZoom()};clearTimeout(lt);lt=setTimeout(loadView,500);nearUI()});
 gps.m=null;gps.tl=L.polyline(gps.trail,{color:'#ef4444',weight:5}).addTo(map);if(gps.pos)setMe(gps.pos);loadView();nearUI();lvL=L.layerGroup().addTo(map);clearInterval(lvT);lvPoll();lvT=setInterval(lvPoll,5000);updShare()}
-function setMe(p){gps.m?gps.m.setLatLng(p):gps.m=L.marker(p,{icon:L.divIcon({className:'',iconSize:[22,22],html:'<div class="me"></div>'}),zIndexOffset:1000}).addTo(map)}
+function setMe(p){gps.m?gps.m.setLatLng(p):gps.m=L.marker(p,{icon:L.divIcon({className:'',iconSize:[22,22],html:'<div class="gpsdot"></div>'}),zIndexOffset:1000}).addTo(map)}
 function put(o){const c=CAT[o.k],m=L.marker([o.lat,o.lng],{icon:L.divIcon({className:'',iconSize:[30,30],iconAnchor:[15,15],html:`<div class="mk" style="background:${c.c}">${o.i||c.i}</div>`})});m.bindPopup(()=>pop(o),{minWidth:230});m.on('popupopen',()=>popOpen(o));MK.set(o.id,m);LG[o.k].addLayer(m)}
 function pop(o){const t=o.t||{},ad=me()&&me().role=='admin',info=[t['addr:street']&&t['addr:street']+(t['addr:city']?', '+t['addr:city']:''),t.opening_hours&&'🕒 '+t.opening_hours,(t.phone||t['contact:phone'])&&'📞 '+(t.phone||t['contact:phone'])].filter(Boolean).map(E).join('<br>');
 return`<div class="pp">${o.k=='tour'?`<div class="pimg" id="pi${o.id}" style="${o.img?`background-image:url(${o.img})`:''}">${o.img?'':(o.i||CAT.tour.i)}</div>`:''}<b>${E(o.n)}</b><div class="mut">${CAT[o.k].n}</div><div id="pw${o.id}">${E(o.d||'')}</div><div class="mut">${info}</div><div class="row" style="margin-top:6px"><button class="btn" onclick="routeTo('${o.id}')">🧭 Directions</button>${o.own&&ad?`<button class="btn g" onclick="poiImg(${o.pid})">📷</button><button class="btn r" onclick="delPoi(${o.pid})">🗑</button>`:''}</div></div>`}
-function popOpen(o){if(o.k!='tour'||o.img)return;const q=o.own?o.n:o.t&&o.t.wikipedia?o.t.wikipedia.replace(/^\w+:/,''):null;if(!q)return;wiki(q).then(w=>{if(!w)return;const e=$('#pi'+o.id),x=$('#pw'+o.id);if(e&&w.thumbnail){e.style.backgroundImage=`url(${w.thumbnail.source})`;e.textContent=''}if(x&&!o.d&&w.extract)x.textContent=w.extract.slice(0,220)+'…'})}
-function loadTs(){D.pois.filter(p=>p.t=='tour').forEach(p=>wiki(p.n).then(w=>{const e=$('#ts'+p.id);if(e&&w&&w.thumbnail){e.style.backgroundImage=`url(${w.thumbnail.source})`;e.textContent=''}}))}
+function popOpen(o){if(o.k!='tour'||o.img)return;const wt=o.own?o.w:o.t&&o.t.wikipedia?o.t.wikipedia.replace(/^\w+:/,''):null,q=wt||(o.own?o.n:null);if(!q)return;wiki(q,!!wt).then(w=>{if(!w)return;const e=$('#pi'+o.id),x=$('#pw'+o.id);if(e&&w.thumbnail){e.style.backgroundImage=`url(${w.thumbnail.source})`;e.textContent=''}if(x&&!o.d&&w.extract)x.textContent=w.extract.slice(0,220)+'…'})}
+function loadTs(){D.pois.filter(p=>p.t=='tour').forEach(p=>wiki(p.w||p.n,!!p.w).then(w=>{const e=$('#ts'+p.id);if(e&&w&&w.thumbnail){e.style.backgroundImage=`url(${w.thumbnail.source})`;e.textContent=''}}))}
 function goPoi(id){go('map');setTimeout(()=>{const o=PT.get('d'+id);map.setView([o.lat,o.lng],13);setTimeout(()=>flyId('d'+id),300)},80)}
 function flyId(id){const o=PT.get(id),m=MK.get(id);if(!o||!m)return;map.setView([o.lat,o.lng],Math.max(map.getZoom(),16));setTimeout(()=>LG[o.k].zoomToShowLayer(m,()=>m.openPopup()),300)}
 function add(es){es.forEach(e=>{const id=e.type[0]+e.id;if(PT.has(id)||!e.tags)return;const k=cls(e.tags),la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon);if(!k||la==null)return;const o={id,lat:la,lng:lo,k,n:e.tags.name||e.tags['name:en']||CAT[k].n,t:e.tags,img:/^https?:/.test(e.tags.image||'')?e.tags.image:null};PT.set(id,o);if(map&&LG[k])put(o)})}
@@ -158,14 +189,20 @@ function delAcc(){if(!confirm('Delete your account permanently?'))return;D.users
 function adm(id,a){const u=D.users.find(x=>x.id==id);if(a=='role'&&id!=D.me)u.role=u.role=='admin'?'member':'admin';if(a=='km')u.km+=50;if(a=='del'&&confirm('Delete '+u.name+'?'))D.users=D.users.filter(x=>x.id!=id);sv();go('admin')}
 function addPoi(){const n=$('#pn').value.trim(),la=parseFloat($('#pla').value),lo=parseFloat($('#plo').value);if(!n||isNaN(la)||isNaN(lo))return toast('Fill name, latitude and longitude');if(la<10.4||la>12||lo<121.8||lo>123.3)return toast('Location must be on Panay Island');D.pois.push({...P($('#pt').value,n,lo,la,$('#pd').value||'Added by admin'),adm:1});sv();toast('Location added');go('admin')}
 function addAnn(){const t=$('#an').value.trim();if(!t)return;D.ann.unshift({t,d:new Date().toLocaleDateString()});sv();toast('Announcement published');go('admin')}
-function send(){if(!me())return auth('login');const i=$('#cm'),x=i.value.trim();if(!x)return;D.chat.push({u:D.me,n:me().name,x,t:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});D.chat=D.chat.slice(-100);sv();go('chat');const b=$('#cb');b.scrollTop=b.scrollHeight}
+/* chat: shared through Firebase when LIVE_URL is set (all phones), otherwise saved on this device only */
+const chTime=t=>{const d=new Date(t),h=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});return d.toDateString()==new Date().toDateString()?h:d.toLocaleDateString([],{month:'short',day:'numeric'})+' '+h};
+async function chGet(){const b=LV();if(!b)return D.chat;try{const r=await fetch(b+'/chat.json?orderBy=%22%24key%22&limitToLast=100');if(!r.ok)return null;const j=await r.json();return Object.entries(j||{}).map(([k,v])=>({...v,k})).filter(m=>m&&m.x).sort((a,c)=>a.t-c.t)}catch(e){return null}}
+async function chPost(rec){const b=LV();if(!b){rec.k='l'+rec.t+Math.random().toString(36).slice(2,6);D.chat.push(rec);D.chat=D.chat.slice(-100);sv();return true}try{const r=await fetch(b+'/chat.json',{method:'POST',body:JSON.stringify(rec)});return r.ok}catch(e){return false}}
+async function chDel(k){if(!confirm('Delete this message?'))return;const b=LV();if(b){try{const r=await fetch(b+'/chat/'+encodeURIComponent(k)+'.json',{method:'DELETE'});if(!r.ok)throw 0}catch(e){return toast('Could not delete the message')}}else{D.chat=D.chat.filter(m=>m.k!=k);sv()}chPoll(1)}
+function chRow(m){const u=me(),mine=u&&m.u==u.id,can=u&&(mine||u.role=='admin');return`<div class="msg ${mine?'me':''}"><div class="mh"><b>${E(m.n)}</b>${m.r=='admin'?'<span class="tag">admin</span>':''}<span class="mut">${chTime(m.t)}</span>${can?`<a class="x" onclick="chDel('${E(m.k)}')">🗑</a>`:''}</div><div class="mx">${E(m.x)}</div></div>`}
+async function chPoll(force){if(cur!='chat')return;const l=await chGet(),b=$('#cb');if(!l||!b||cur!='chat')return;const sig=l.length+'|'+(l.length?l[l.length-1].k:'');if(!force&&sig==chSig)return;chSig=sig;const near=force||b.scrollHeight-b.scrollTop-b.clientHeight<90;b.innerHTML=l.map(chRow).join('')||'<div class="mut">No messages yet. Say hi to the riders! 👋</div>';if(near)b.scrollTop=b.scrollHeight}
+function initChat(){chSig='';chPoll(1);chT=setInterval(chPoll,3000)}
+async function send(){const u=me();if(!u)return auth('login');const i=$('#cm'),x=i.value.trim().slice(0,500);if(!x)return;i.value='';const ok=await chPost({u:u.id,n:u.name,r:u.role,x,t:Date.now()});if(!ok){i.value=x;return toast('Message not sent. Check your connection.')}await chPoll(1);i.focus()}
 function addPh(){if(!me())return auth('login');pickImg(d=>{D.photos.unshift({id:Date.now(),u:D.me,n:me().name,src:d});D.photos=D.photos.slice(0,24);sv();go('photos')})}
 function delPh(id){D.photos=D.photos.filter(p=>p.id!=id);sv();go('photos')}
 const LOGO='logo.png';$('#lg').src=LOGO;
-theme();go('home');if(me()&&me().share)shareOn(1);
 
 /* live location sharing */
-let LW=null,lvT=null,lvL=null,lastP=0,MY=null,LVD={};
 const LV=()=>typeof LIVE_URL!=='undefined'&&LIVE_URL?LIVE_URL.replace(/\/$/,''):'';
 async function lvSet(u,rec){const b=LV();if(b){try{await fetch(b+'/live/'+u.id+'.json',{method:rec?'PUT':'DELETE',body:rec?JSON.stringify(rec):undefined})}catch(e){}}else{try{const m=JSON.parse(localStorage.getItem('pbc_live')||'{}');rec?m[u.id]=rec:delete m[u.id];localStorage.setItem('pbc_live',JSON.stringify(m))}catch(e){}}}
 async function lvGet(){const b=LV();if(b){try{return(await(await fetch(b+'/live.json')).json())||{}}catch(e){return{}}}try{return JSON.parse(localStorage.getItem('pbc_live')||'{}')}catch(e){return{}}}
@@ -180,3 +217,5 @@ async function lvPoll(){if(!map)return;const m=await lvGet(),now=Date.now(),c=gp
 Object.entries(m).forEach(([id,r])=>{if(!r||now-r.t>3e5)return;const mine=id==D.me;rows.push([id,r,mine]);L.marker([r.la,r.lo],{icon:L.divIcon({className:'',iconSize:[40,52],iconAnchor:[20,18],html:`<div class="lv ${r.r=='admin'?'ad':''} ${mine?'mi':''}"><span>${E((r.n||'?')[0]).toUpperCase()}</span></div><div class="lvn">${E((r.n||'').split(' ')[0])}</div>`}),zIndexOffset:900}).bindPopup(()=>`<div class="pp"><b>${E(r.n)}</b>${mine?' (you)':''}<div class="mut">${r.r=='admin'?'Admin':'Member'} · ${Math.round((Date.now()-r.t)/1000)} s ago</div>${mine?'':`<button class="btn" style="margin-top:6px" onclick="riderRoute('${id}')">🧭 Directions</button>`}</div>`).addTo(lvL)});
 const el=$('#lvl');if(el)el.innerHTML=`<b>👥 Riders live now (${rows.length})</b>`+(rows.map(([id,r,mine])=>`<div class="row" style="flex-wrap:nowrap;padding:6px 0;border-bottom:1px solid var(--b);cursor:pointer" onclick="map.setView([${r.la},${r.lo}],16)"><div class="lv s ${r.r=='admin'?'ad':''}" style="flex:none;margin:0"><span>${E((r.n||'?')[0]).toUpperCase()}</span></div><div style="flex:4"><b>${E(r.n)}${mine?' (you)':''}</b><div class="mut">${r.r=='admin'?'Admin':'Member'} · ${Math.round((now-r.t)/1000)} s ago</div></div><span class="mut" style="flex:none">${c&&!mine?dk(c,[r.la,r.lo]).toFixed(1)+' km':''}</span></div>`).join('')||'<div class="mut">Nobody is sharing location right now. Turn yours on!</div>')}
 function riderRoute(id){const r=LVD[id],c=gps.pos||MY||[map.getCenter().lat,map.getCenter().lng];map.closePopup();showRoute([[c[1],c[0]],[r.lo,r.la]],'#16a34a','To '+r.n)}
+/* start the app only after everything above is defined */
+theme();go('home');if(me()&&me().share)shareOn(1);

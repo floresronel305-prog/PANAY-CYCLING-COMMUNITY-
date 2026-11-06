@@ -18,6 +18,9 @@ admin@panaybike.ph / admin123 (change the password in Settings).
 ## Live rider locations (see other riders on different phones)
 1. console.firebase.google.com > Create project.
 2. Build > Realtime Database > Create database (Singapore) > Start in test mode.
-3. Rules tab: paste `{"rules":{"live":{".read":true,".write":true}}}` and Publish.
+3. Rules tab: paste `{"rules":{"live":{".read":true,".write":true},"chat":{".read":true,".write":true}}}` and Publish.
 4. Copy the database URL and paste it into config.js (LIVE_URL). Upload config.js again.
 Riders appear on the map only while their browser is open and location sharing is ON.
+
+## Community chat
+Chat uses the same Firebase database (the `chat` rule above). Without LIVE_URL, chat only works on one device.
