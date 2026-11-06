@@ -17,9 +17,10 @@ async function move(from,to,amt,note,pin,skip){if(from==to)return'Cannot pay you
  a.bal-=amt;a.pts=(a.pts||0)+Math.floor(amt/100);b.bal=(b.bal||0)+amt;await S('wallets',from,a);await S('wallets',to,b);
  const t=Date.now();await S('txs/'+from,nid(),{t,y:'out',a:amt,m:note});await S('txs/'+to,nid(),{t,y:'in',a:amt,m:note})}
 V.wallet=()=>U()?out('Loading…',rw):gate('Wallet');
-async function rw(){const u=U(),w=await G('wallets/'+u.id),t=Object.values(await G('txs/'+u.id)).sort((a,b)=>b.t-a.t).slice(0,30);
+async function rw(){const u=U(),w=await G('wallets/'+u.id),al=Object.values(await G('txs/'+u.id)),t=al.slice().sort((a,b)=>b.t-a.t).slice(0,30);
+ const led=Math.round(al.reduce((n,x)=>n+(x.a>0&&x.a<1e9?(x.y=='in'?x.a:-x.a):0),0)*100)/100;if(Math.abs(led-(+w.bal||0))>.005){w.bal=led;await S('wallets',u.id,w)}
  await S('wdir',u.id,{n:u.name,e:(u.email||u.phone||'').toLowerCase()});
- R(`<h2>💳 Panay Wallet</h2><div class="card"><div class="mut">Balance${w.frozen?' · ❄️ FROZEN':''}</div><div class="big">${P(w.bal)}</div><div class="mut">⭐ ${w.pts||0} points · Wallet ID ${u.id}</div></div>
+ R(`<h2>💳 Panay Wallet</h2><div class="card"><div class="mut">Balance${w.frozen?' · ❄️ FROZEN':''}</div><div class="big">${P(led)}</div><div class="mut">⭐ ${w.pts||0} points · Wallet ID ${u.id}</div></div>
  <div class="row" style="margin:10px 0"><button class="btn" onclick="wAdd()">+ Add money</button><button class="btn" onclick="wSend()">Send</button></div>
  <div class="row"><button class="btn g" onclick="wPin()">${w.pin?'Change':'Set'} PIN</button><button class="btn g" onclick="wFrz()">${w.frozen?'Unfreeze':'Freeze'}</button><button class="btn g" onclick="wOut()">Withdraw</button></div>
  <h3 class="sh">Transactions</h3>${t.map(x=>`<div class="card" style="margin-bottom:6px"><b>${x.y=='in'?'+':'−'}${P(x.a)}</b> <span class="mut">${E(x.m)} · ${new Date(x.t).toLocaleString()}</span></div>`).join('')||'<p class="mut">No transactions yet.</p>'}`)}
