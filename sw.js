@@ -1,6 +1,6 @@
 /* Service worker: installable app shell + push-style notifications. Same-site files: network first, cached fallback. */
-const CACHE='panaybike-v6';
-const SHELL=['./','index.html','style.css','pro.css','app.js','plus.js','pro.js','install.js','config.js','logo.png','manifest.json','icon-192.png','icon-512.png'];
+const CACHE='panaybike-v7';
+const SHELL=['./','index.html','style.css','pro.css','ultra.css','ultra.js','app.js','plus.js','pro.js','install.js','config.js','logo.png','manifest.json','icon-192.png','icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.allSettled(SHELL.map(u=>c.add(u)))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{

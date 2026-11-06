@@ -28,3 +28,6 @@ Chat, ride photos, group rides (`events`) and the leaderboard (`leaders`) use th
 ## Panay Wallet, Shop, Jobs, LGU (plus.js)
 Added without removing anything. Uses the same Firebase LIVE_URL under `/px`. Add this to your Firebase rules: `"px":{".read":true,".write":true}`.
 IMPORTANT: with open rules and browser-stored accounts, "own data only" is enforced in the app screens, not by the database. Before handling real money, add Firebase Authentication + rules (e.g. `auth.uid===$uid`) and a payment gateway (PayMongo/GCash) for real top-ups.
+
+## Ultra AR (ultra.js / ultra.css)
+10 browser AR features under the new **Ultra** tab: AR Compass, AR Nearby, AR Ride HUD, AR Photo Cam, 3D Neon Gauge, Trip Recorder (GPX), Ride Score, Golden Hour, SOS Beacon, Bike Check. No backend needed. Camera, GPS and compass require **HTTPS** (Render/Netlify/GitHub Pages all provide it) and the user's permission.
