@@ -1,7 +1,7 @@
 /* Simple service worker: makes the site installable and keeps the app shell available.
    Same-site files are fetched from the network first (so new uploads show up), with a cached fallback. */
-const CACHE='panaybike-v1';
-const SHELL=['./','index.html','style.css','app.js','config.js','logo.png','manifest.json','icon-192.png','icon-512.png'];
+const CACHE='panaybike-v2';
+const SHELL=['./','index.html','style.css','app.js','plus.js','config.js','logo.png','manifest.json','icon-192.png','icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{

@@ -24,3 +24,7 @@ Riders appear on the map only while their browser is open and location sharing i
 
 ## Community chat
 Chat, ride photos, group rides (`events`) and the leaderboard (`leaders`) use the same Firebase database (the rules above). Without LIVE_URL, they only work on one device.
+
+## Panay Wallet, Shop, Jobs, LGU (plus.js)
+Added without removing anything. Uses the same Firebase LIVE_URL under `/px`. Add this to your Firebase rules: `"px":{".read":true,".write":true}`.
+IMPORTANT: with open rules and browser-stored accounts, "own data only" is enforced in the app screens, not by the database. Before handling real money, add Firebase Authentication + rules (e.g. `auth.uid===$uid`) and a payment gateway (PayMongo/GCash) for real top-ups.
