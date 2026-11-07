@@ -47,3 +47,9 @@ Bottom tab bar (phones), floating SOS, splash, Challenges & badges (More > Chall
 
 ## Extra layer (extra.js / extra.css)
 Wallet card + QR (My QR, Scan to pay, DEMO money), voice messages in chat (🎤), ride summary image (Share) after a ride. Server: same Firebase (/px, /ridelog, chat paths).
+
+## Final layer (final.js)
+Polls, Ride calculator, Help & FAQ, Feedback (admin sees it in Admin), About-the-developer card. Data: /polls and /feedback on Firebase.
+
+## Tourist spot photos (spots.js)
+Admin: Admin page > Tourist spot photos (Change / Reset), or the 📷 button on Home tourist cards. Saved on Firebase at /spotimg.

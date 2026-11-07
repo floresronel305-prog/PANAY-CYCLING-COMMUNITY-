@@ -13,14 +13,14 @@ const seen=()=>{try{return JSON.parse(localStorage.getItem('pb_seen')||'{}')}cat
 
 /* ---------- demo wallet (same /px ledger as Wallet & Pay) ---------- */
 const bal=async id=>Math.round(Object.values(await J('/px/txs/'+id)||{}).reduce((n,x)=>n+(x.a>0&&x.a<1e11?(x.y=='in'?x.a:-x.a):0),0)*100)/100;
-async function move(from,to,a,note){const w=await J('/px/wallets/'+from)||{};if(w.frozen)return'Frozen ang wallet mo.';if(w.pin&&w.pin!=prompt('PIN:'))return'Maling PIN.';
- if(!(a>0&&a<=5e10))return'Invalid na halaga.';const b=await bal(from);if(b<a)return'Kulang ang balance ('+P(b)+').';
- const t=Date.now();if(await J('/px/txs/'+from+'/'+nid(),'PUT',{t,y:'out',a,m:note})===undefined)return'Hindi na-save. Check ang internet.';
+async function move(from,to,a,note){const w=await J('/px/wallets/'+from)||{};if(w.frozen)return'Your wallet is frozen.';if(w.pin&&w.pin!=prompt('PIN:'))return'Wrong PIN.';
+ if(!(a>0&&a<=5e10))return'Invalid amount.';const b=await bal(from);if(b<a)return'Insufficient balance ('+P(b)+').';
+ const t=Date.now();if(await J('/px/txs/'+from+'/'+nid(),'PUT',{t,y:'out',a,m:note})===undefined)return'Could not save. Check your internet.';
  w.bal=Math.round((b-a)*100)/100;await J('/px/wallets/'+from,'PUT',w);await J('/px/txs/'+to+'/'+nid(),'PUT',{t,y:'in',a,m:note});const w2=await J('/px/wallets/'+to)||{};w2.bal=await bal(to);await J('/px/wallets/'+to,'PUT',w2);return''}
-async function topup(){const u=U();if(!u)return auth('login');if(await bal(u.id)>=5e10)return toast('Mataas na ang demo balance.');
+async function topup(){const u=U();if(!u)return auth('login');if(await bal(u.id)>=5e10)return toast('Your demo balance is already very high.');
  const t=Date.now();await J('/px/txs/'+u.id+'/'+nid(),'PUT',{t,y:'in',a:500,m:'Demo top-up'});const w=await J('/px/wallets/'+u.id)||{};w.bal=await bal(u.id);await J('/px/wallets/'+u.id,'PUT',w);toast('+₱500 DEMO money added');fillHero()}
 async function sendMoney(to,name){const u=U(),a=parseFloat(prompt('Send DEMO money to '+(name||'user')+' (₱):','100'));if(!(a>0))return;
- const e=await move(u.id,to,a,'Sent to '+(name||'user'));if(e)return toast(e);await post({x:'💸 Sent '+P(a)+' (demo)',pay:a});toast('Naipadala ang '+P(a));fillHero()}
+ const e=await move(u.id,to,a,'Sent to '+(name||'user'));if(e)return toast(e);await post({x:'💸 Sent '+P(a)+' (demo)',pay:a});toast('Sent '+P(a));fillHero()}
 
 /* ---------- messaging core ---------- */
 async function post(extra){const u=U();if(!u||!R)return false;const rec={u:u.id,n:u.name,r:u.role,t:Date.now(),...extra};if(reply){rec.q={n:reply.n,x:String(reply.x||'📷').slice(0,60)};reply=null}
@@ -31,17 +31,17 @@ const bub=m=>{const u=U(),mine=m.u==u.id,rx=m.rx||{},cnt={};Object.values(rx).fo
  <div class="cact">${['👍','❤️','😂'].map(e=>`<a onclick="cRx('${m.k}','${e}')" class="${rx[u.id]==e?'on':''}">${e}${cnt[e]||''}</a>`).join('')}<a onclick="cRep('${m.k}')">↩</a>${mine||u.role=='admin'?`<a onclick="cDel('${m.k}')">🗑</a>`:''}</div></div>`};
 let cache=[];
 async function tick(){if(cur!='msg'||!R)return;const [l,ty]=await Promise.all([load(),J('/typing/'+R)]);const b=$('#cb2');if(!l||!b)return;cache=l;const s=JSON.stringify(l);
- if(s!=sig){sig=s;const near=b.scrollHeight-b.scrollTop-b.clientHeight<120||!b.dataset.f;b.dataset.f=1;b.innerHTML=l.map(bub).join('')||'<div class="mut" style="padding:20px;text-align:center">Wala pang messages. Mag-hi! 👋</div>';if(near)b.scrollTop=b.scrollHeight;mark(R)}
+ if(s!=sig){sig=s;const near=b.scrollHeight-b.scrollTop-b.clientHeight<120||!b.dataset.f;b.dataset.f=1;b.innerHTML=l.map(bub).join('')||'<div class="mut" style="padding:20px;text-align:center">No messages yet. Say hi! 👋</div>';if(near)b.scrollTop=b.scrollHeight;mark(R)}
  const me_=U().id,w=Object.entries(ty||{}).filter(([k,v])=>k!=me_&&Date.now()-v.t<4500).map(([k,v])=>v.n.split(' ')[0]);const t=$('#cty');if(t)t.textContent=w.length?w.join(', ')+' is typing…':''}
 window.cRx=async(k,e)=>{const u=U(),m=cache.find(x=>x.k==k);if(!m)return;const same=(m.rx||{})[u.id]==e;await J(rp(R)+'/'+k+'/rx/'+u.id,same?'DELETE':'PUT',same?undefined:e);tick()};
 window.cRep=k=>{reply=cache.find(x=>x.k==k);const q=$('#crep');if(q&&reply){q.style.display='flex';q.firstChild.textContent='↩ '+reply.n+': '+String(reply.x||'📷').slice(0,50)}$('#cin').focus()};
 window.cDel=async k=>{if(!confirm('Delete this message?'))return;await J(rp(R)+'/'+k,'DELETE');tick()};
-window.cSend=async()=>{const i=$('#cin'),x=i.value.trim().slice(0,600);if(!x)return;i.value='';if(!await post({x})){i.value=x;return toast('Hindi naipadala. Check ang server connection.')}tick();$('#crep').style.display='none'};
-window.cImg=()=>pickImg(async d=>{if(d.length>350000)return toast('Masyadong malaki ang photo.');if(!await post({i:d}))return toast('Hindi naipadala.');tick()});
+window.cSend=async()=>{const i=$('#cin'),x=i.value.trim().slice(0,600);if(!x)return;i.value='';if(!await post({x})){i.value=x;return toast('Message not sent. Check the server connection.')}tick();$('#crep').style.display='none'};
+window.cImg=()=>pickImg(async d=>{if(d.length>350000)return toast('Photo is too large.');if(!await post({i:d}))return toast('Not sent.');tick()});
 window.cTyping=()=>{const u=U();if(Date.now()-lastTy<2000)return;lastTy=Date.now();J('/typing/'+R+'/'+u.id,'PUT',{n:u.name,t:Date.now()})};
 window.cMic=async()=>{const b=$('#cmic');if(mr){mr.stop();return}try{const s=await navigator.mediaDevices.getUserMedia({audio:true}),ch=[];mr=new MediaRecorder(s,{audioBitsPerSecond:24000});mr.ondataavailable=e=>ch.push(e.data);
- mr.onstop=()=>{s.getTracks().forEach(t=>t.stop());b.textContent='🎤';b.classList.remove('rec');const bl=new Blob(ch,{type:mr.mimeType});mr=null;if(bl.size>300000)return toast('Masyadong mahaba. Max ~30 sec.');const f=new FileReader();f.onload=async()=>{if(!await post({a:f.result}))return toast('Hindi naipadala.');tick()};f.readAsDataURL(bl)};
- mr.start();b.textContent='⏹';b.classList.add('rec');setTimeout(()=>mr&&mr.state=='recording'&&mr.stop(),30000)}catch(e){toast('Payagan ang microphone.')}};
+ mr.onstop=()=>{s.getTracks().forEach(t=>t.stop());b.textContent='🎤';b.classList.remove('rec');const bl=new Blob(ch,{type:mr.mimeType});mr=null;if(bl.size>300000)return toast('Too long. Max ~30 sec.');const f=new FileReader();f.onload=async()=>{if(!await post({a:f.result}))return toast('Not sent.');tick()};f.readAsDataURL(bl)};
+ mr.start();b.textContent='⏹';b.classList.add('rec');setTimeout(()=>mr&&mr.state=='recording'&&mr.stop(),30000)}catch(e){toast('Please allow the microphone.')}};
 window._move=move;window._bal=bal;window.cMoney=()=>peer&&sendMoney(peer.id,peer.n);
 
 /* ---------- screens ---------- */
@@ -55,7 +55,7 @@ window.cBack=()=>{R=null;clearInterval(tm);inbox()};
 async function inbox(){const b=$('#co');if(!b)return;if(window._pend){const p=window._pend;window._pend=null;return cOpen(...p)}const u=U(),[ix,us,pz]=await Promise.all([J('/dmidx/'+u.id),J('/users'),J('/presence')]),sn=seen();window._pz=pz||{};
  const cv=Object.entries(ix||{}).sort((a,b)=>b[1].t-a[1].t),ppl=Object.values(us||{}).filter(x=>x&&x.id&&x.id!=u.id);
  b.innerHTML=`<h2>Inbox</h2><div class="cl">${Object.entries(ROOMS).map(([k,v])=>`<div class="crow" onclick="cOpen('${k}','${v[1]}')"><span class="av">${v[0]}</span><div><b>${v[1]}</b><div class="mut">${v[2]}</div></div></div>`).join('')}</div>
- <h2>Private messages</h2><div class="cl">${cv.map(([k,v])=>`<div class="crow" onclick="cOpen('dm_${k}','${E(v.n)}','${E(v.w)}','${E(v.n)}')"><span class="av">${E((v.n||'?')[0]).toUpperCase()}</span><div style="flex:1;min-width:0"><b>${E(v.n)}</b>${v.t>(sn['dm_'+k]||0)&&v.f!=u.id?'<i class="dot"></i>':''}<div class="mut" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${E(v.x)}</div></div><span class="mut">${ago(v.t)}</span></div>`).join('')||'<div class="mut" style="padding:10px">Wala pang private chats. Pumili ng rider sa ibaba.</div>'}</div>
+ <h2>Private messages</h2><div class="cl">${cv.map(([k,v])=>`<div class="crow" onclick="cOpen('dm_${k}','${E(v.n)}','${E(v.w)}','${E(v.n)}')"><span class="av">${E((v.n||'?')[0]).toUpperCase()}</span><div style="flex:1;min-width:0"><b>${E(v.n)}</b>${v.t>(sn['dm_'+k]||0)&&v.f!=u.id?'<i class="dot"></i>':''}<div class="mut" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${E(v.x)}</div></div><span class="mut">${ago(v.t)}</span></div>`).join('')||'<div class="mut" style="padding:10px">No private chats yet. Pick a rider below.</div>'}</div>
  <h2>Riders (${ppl.length})</h2><input id="cs" class="csr" placeholder="Search riders…" oninput="cFind(this.value)"><div class="cl" id="cpl">${ppl.map(x=>pr(x)).join('')}</div>`;window._ppl=ppl}
 const pr=x=>`<div class="crow" data-n="${E((x.name||'').toLowerCase())}" onclick="cDm('${E(x.id)}','${E(x.name)}')"><span class="av">${E((x.name||'?')[0]).toUpperCase()}${window._pz[x.id]&&Date.now()-window._pz[x.id].t<9e4?'<i class="on"></i>':''}</span><div style="flex:1"><b>${E(x.name)}</b><div class="mut">${x.role=='admin'?'Admin':'Member'} · ${(+x.km||0).toFixed(0)} km</div></div><span class="btn g" style="padding:5px 10px">Message</span></div>`;
 window.cFind=q=>{q=q.toLowerCase();document.querySelectorAll('#cpl .crow').forEach(r=>r.style.display=r.dataset.n.includes(q)?'':'none')};
@@ -65,7 +65,7 @@ async function idxPoll(){const u=U();if(!u||!LV())return;const ix=await J('/dmid
  const d=$('#cdot');if(d)d.textContent=n?n:''}
 
 /* ---------- home hero + quick actions ---------- */
-const HERO=()=>{const u=U();return u?`<div class="hero"><div><div class="mut">Magandang araw,</div><h2 style="margin:0">${E(u.name.split(' ')[0])} 👋</h2></div><div class="hb"><div class="mut">Demo wallet</div><div class="big" id="cbal">₱–</div></div></div>
+const HERO=()=>{const u=U();return u?`<div class="hero"><div><div class="mut">Welcome back,</div><h2 style="margin:0">${E(u.name.split(' ')[0])} 👋</h2></div><div class="hb"><div class="mut">Demo wallet</div><div class="big" id="cbal">₱–</div></div></div>
 <div class="qa"><button onclick="go('msg')">💬<span>Inbox</span></button><button onclick="go('pay')">💸<span>Pay</span></button><button onclick="cTop()">➕<span>Top up</span></button><button onclick="go('events')">🗓️<span>Rides</span></button><button onclick="go('map')">🗺️<span>Map</span></button><button onclick="go('club')">🎫<span>Member</span></button></div>`:''};
 window.cTop=topup;
 async function fillHero(){const u=U(),e=$('#cbal');if(u&&e&&LV())e.textContent=P(await bal(u.id))}

@@ -6,3 +6,5 @@
 #instbtn{border:0;border-radius:12px;padding:8px 12px;background:linear-gradient(135deg,var(--a),#7c3aed);color:#fff;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
 @media(max-width:400px){#instbtn span{display:none}}
 #cbal,.wb{font-size:clamp(20px,7vw,34px)}
+#apptools{width:40px;height:40px;border-radius:14px;border:1px solid var(--b);background:var(--c);color:var(--t);font-size:20px;font-weight:800;cursor:pointer;flex:none}
+.spic{position:absolute;right:6px;top:6px;width:34px;height:34px;border-radius:50%;border:0;background:#000a;color:#fff;font-size:16px;cursor:pointer;z-index:2}

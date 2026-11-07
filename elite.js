@@ -6,9 +6,13 @@ const TB=[['home','🏠','Home'],['map','🗺️','Map'],['events','🗓️','Ri
 function bar(){let b=$('#tabbar');if(!b){b=document.createElement('div');b.id='tabbar';document.body.appendChild(b)}
  b.innerHTML=TB.map(([k,i,n])=>`<button class="${cur==k?'on':''}" onclick="${k=='more'?'moreM()':`go('${k}')`}">${i}<span>${n}</span></button>`).join('');
  let f=$('#sosfab');if(!f){f=document.createElement('button');f.id='sosfab';f.textContent='🆘';f.title='SOS';f.onclick=()=>me()?sos():auth('login');document.body.appendChild(f)}}
-window.moreM=()=>{const u=me(),L=[['club','🎫','Member'],['chal','🏆','Challenges'],['pay','💸','Pay'],['wallet','👛','Wallet'],['shop','🛍️','Shop'],['jobs','💼','Jobs'],['ultra','🕶️','Ultra AR'],['tools','🧰','Tools'],['photos','📷','Photos'],['about','ℹ️','About'],['set','⚙️','Settings']];if(u&&u.role=='admin')L.push(['admin','🛡️','Admin']);
- $('#modal').innerHTML=`<div class="ov" onclick="if(event.target==this)closeM()"><div class="md"><h3>Menu</h3><div class="mg">${L.filter(x=>V[x[0]]).map(x=>`<button onclick="closeM();go('${x[0]}')">${x[1]}<span>${x[2]}</span></button>`).join('')}</div></div></div>`};
+window.moreM=()=>{const u=me(),L=[['club','🎫','Member'],['chal','🏆','Challenges'],['pay','💸','Pay'],['wallet','👛','Wallet'],['shop','🛍️','Shop'],['jobs','💼','Jobs'],['ultra','🕶️','Ultra AR'],['tools','🧰','Tools'],['polls','🗳️','Polls'],['calc','🧮','Ride calculator'],['help','❓','Help'],['feedback','📝','Feedback'],['photos','📷','Photos'],['about','ℹ️','About'],['set','⚙️','Settings']];if(u&&u.role=='admin')L.push(['admin','🛡️','Admin']);
+ $('#modal').innerHTML=`<div class="ov" onclick="if(event.target==this)closeM()"><div class="md"><h3>Menu</h3><div class="mg">${L.filter(x=>V[x[0]]).map(x=>`<button onclick="closeM();go('${x[0]}')">${x[1]}<span>${x[2]}</span></button>`).join('')}<button onclick="closeM();eDesk()">${dOn()?'📱':'🖥️'}<span>${dOn()?'Mobile view':'Desktop view'}</span></button><button onclick="closeM();window.tools?tools():toast('Refresh the app to load App options')">⚙️<span>App options</span></button></div></div></div>`};
 
+/* ---------- desktop / mobile view (also in the More menu) ---------- */
+const vpm=document.querySelector('meta[name=viewport]'),VB=vpm.content,dOn=()=>{try{return localStorage.getItem('pb_desk')=='1'}catch(e){return false}};window.dOn=dOn;
+const dApply=()=>{vpm.content=dOn()?'width=1100, initial-scale=0.35, user-scalable=yes':VB};dApply();
+window.eDesk=()=>{try{localStorage.setItem('pb_desk',dOn()?'0':'1')}catch(e){}dApply();toast(dOn()?'Desktop view ON':'Mobile view ON')};
 /* ---------- challenges & badges ---------- */
 const BD=[[10,'🚲','First 10 km'],[50,'🥉','50 km'],[100,'🥈','100 km'],[500,'🥇','500 km'],[1000,'🏆','1000 km']],GOAL=100;
 V.chal=()=>{const u=me();if(!u)return'<div class="card cco"><h3>Sign in to join challenges</h3><button class="btn" onclick="auth(\'login\')">Log in</button></div>';
