@@ -1,30 +1,40 @@
 # Panay Cycling Community (RON)
 
-Static website: index.html, style.css, app.js, logo.png.
+Personal project by Ronel S. Flores. Static website: index.html, style.css, app.js, plus.js, pro.js, ultra.js, sync.js, config.js, logo.png.
 
-## Deploy on Render
+## 1. Deploy on Render
 1. Upload this folder to a GitHub repository.
 2. Render > New > Static Site > pick the repository.
 3. Build command: (leave empty). Publish directory: `.`
-4. Open the site over HTTPS (needed for Live GPS).
+4. Open the site over HTTPS (needed for Live GPS, camera and compass).
 
-## Admin login
-admin@panaybike.ph / admin123 (change the password in Settings).
+## 2. ONE shared server for everyone (do this once)
+Without this step every phone only sees its own data. With it, all users share accounts, chat, photos, group rides, leaderboard, live GPS, wallet/shop/jobs, announcements and admin map pins.
 
-## Notes
-- Map: OpenStreetMap tiles. Gas stations, stores, vulcanizing, etc. load live from OpenStreetMap (Overpass API).
-- Accounts, chat and photos are saved in each visitor's browser (localStorage). For shared accounts, add a backend such as Firebase or Supabase.
-
-## Live rider locations (see other riders on different phones)
 1. console.firebase.google.com > Create project.
 2. Build > Realtime Database > Create database (Singapore) > Start in test mode.
-3. Rules tab: paste `{"rules":{"live":{".read":true,".write":true},"chat":{".read":true,".write":true},"photos":{".read":true,".write":true},"events":{".read":true,".write":true},"leaders":{".read":true,".write":true}}}` and Publish.
-4. Copy the database URL and paste it into config.js (LIVE_URL). Upload config.js again.
-Riders appear on the map only while their browser is open and location sharing is ON.
+3. Rules tab: paste this and Publish:
+```
+{"rules":{".read":true,".write":true}}
+```
+(or the long form: users, uphotos, live, chat, photos, events, leaders, ann, pois, px each with ".read":true,".write":true)
+4. Copy the database URL and paste it into `config.js` (`LIVE_URL`). Upload `config.js` again.
+   Alternative: log in as admin > Admin > Shared server > paste URL > Save & test > "Share connect link". Anyone who opens that link once is connected.
+5. The site shows a green "Connected to the shared server" card on Home and in Settings when it works.
 
-## Community chat
-Chat, ride photos, group rides (`events`) and the leaderboard (`leaders`) use the same Firebase database (the rules above). Without LIVE_URL, they only work on one device.
+## Admin login (do this FIRST)
+admin@panaybike.ph / admin123. Log in once right after connecting the server and change the password in Settings, so nobody else can claim the admin account.
 
-## Panay Wallet, Shop, Jobs, LGU (plus.js)
-Added without removing anything. Uses the same Firebase LIVE_URL under `/px`. Add this to your Firebase rules: `"px":{".read":true,".write":true}`.
-IMPORTANT: with open rules and browser-stored accounts, "own data only" is enforced in the app screens, not by the database. Before handling real money, add Firebase Authentication + rules (e.g. `auth.uid===$uid`) and a payment gateway (PayMongo/GCash) for real top-ups.
+## Live GPS: see all riders
+- Every rider turns on "Live location" (Home, Map or Settings). They appear on everyone's Map and in the "Riders live now" list.
+- Position is sent every few seconds and also every 20 seconds as a heartbeat. Riders who stopped sharing recently show faded as "last seen".
+- Admin > Members > Locate jumps to a rider.
+- Browsers pause GPS when the phone is locked or the app is in the background. Use "Keep screen on" on the Map while riding.
+
+## Notes
+- Accounts are now stored on the server (passwords are hashed). Old accounts on a phone are moved to the server the next time they log in.
+- IMPORTANT: with open Firebase rules, security is enforced in the app only. Before handling real money (Wallet), add Firebase Authentication + proper rules and a payment gateway (PayMongo/GCash).
+- Map: OpenStreetMap tiles, Overpass API for gas stations, stores, vulcanizing, etc.
+
+## Ultra AR (ultra.js / ultra.css)
+10 browser AR features under the **Ultra** tab. Camera, GPS and compass require HTTPS and permission.
