@@ -12,7 +12,7 @@
 .tp{position:absolute;top:calc(80px + env(safe-area-inset-top,0px));left:0;right:0;height:54px;text-align:center;color:#fff;font:600 13px system-ui;border-block:1px solid #22d3ee88;background:#0b1f2a88;backdrop-filter:blur(6px);overflow:hidden;line-height:54px}
 .tp i{position:absolute;top:30px;width:1px;height:10px;background:#fff8;font-style:normal;transform:translateX(-50%)}.tp i.m{height:16px;top:24px}.tp i.b{height:22px;top:18px;background:#22d3ee;line-height:0}.tp i.b{color:#22d3ee;font-weight:800}
 .tp u{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#f43f5e;box-shadow:0 0 10px #f43f5e}
-.big{position:absolute;top:42%;width:100%;text-align:center;color:#fff;font:800 72px system-ui;text-shadow:0 0 24px #22d3ee}
+#ux .big{position:absolute;top:42%;width:100%;text-align:center;color:#fff;font:800 72px system-ui;text-shadow:0 0 24px #22d3ee}
 .hud{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom,0px));left:12px;right:12px;display:flex;justify-content:space-around;padding:14px;border-radius:22px;border:1px solid #22d3ee66;background:#04141cbb;backdrop-filter:blur(10px);color:#fff;text-align:center;box-shadow:0 0 30px #22d3ee44}
 .hud b{display:block;font:800 36px system-ui}.hud small,.stat small,.grid3 small{opacity:.7;font-size:11px;letter-spacing:1px}
 .pl{position:absolute;color:#fff;text-align:center;padding:6px 10px;border-radius:14px;border:1px solid #22d3ee;background:#04141ccc;box-shadow:0 0 16px #22d3ee88;max-width:140px;animation:fl 3s ease-in-out infinite}
