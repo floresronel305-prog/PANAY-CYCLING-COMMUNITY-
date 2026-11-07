@@ -1,0 +1,14 @@
+/* elite.css – bottom tab bar, floating SOS, splash, challenges/badges, presence dot. */
+#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;background:var(--hd);border-top:1px solid var(--b);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(14px)}
+#tabbar button{flex:1;border:0;background:none;color:var(--m);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:20px;padding:4px 0;border-radius:12px;cursor:pointer}
+#tabbar button span{font-size:10px;font-weight:700}#tabbar button.on{color:var(--a);background:color-mix(in srgb,var(--a),transparent 88%)}
+@media(max-width:759px){nav{display:none!important}.shell{grid-template-columns:minmax(0,1fr)!important}#tabbar{display:flex}body{padding-bottom:76px}#sosfab{bottom:88px!important}}
+#sosfab{position:fixed;left:14px;bottom:20px;z-index:45;width:48px;height:48px;border-radius:50%;border:0;background:#ef4444;font-size:22px;box-shadow:0 6px 18px #ef444488;cursor:pointer;animation:sp 2.4s infinite}
+@keyframes sp{50%{box-shadow:0 0 0 10px #ef444422}}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.mg button{border:1px solid var(--b);background:var(--c);color:var(--t);border-radius:14px;padding:12px 4px;font-size:22px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}.mg button span{font-size:11px;font-weight:700;color:var(--m)}
+.pbar{height:10px;border-radius:6px;background:color-mix(in srgb,var(--t),transparent 88%);margin-top:8px;overflow:hidden}.pbar i{display:block;height:100%;background:var(--grad);border-radius:6px;transition:width .6s}
+.bgs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.bg{text-align:center;padding:8px 2px;border:1px solid var(--b);border-radius:12px;background:var(--c);opacity:.4;filter:grayscale(1)}.bg.got{opacity:1;filter:none;border-color:var(--a)}.bg span{font-size:24px;display:block}.bg small{font-size:9px;color:var(--m)}
+.av{position:relative}.av i.on{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;background:#22c55e;border:2px solid var(--c)}
+#splash{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;transition:opacity .5s}#splash.out{opacity:0;pointer-events:none}
+#splash img{width:96px;height:96px;border-radius:22px;animation:pop .7s}#splash b{letter-spacing:3px;color:var(--t)}@keyframes pop{from{transform:scale(.6);opacity:0}}

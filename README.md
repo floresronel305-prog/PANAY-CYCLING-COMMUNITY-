@@ -41,3 +41,9 @@ admin@panaybike.ph / admin123. Log in once right after connecting the server and
 
 ## Company layer (company.js / company.css)
 Inbox tab: General/Rides/Marketplace rooms + private DMs stored on Firebase (/chat, /rooms, /dm, /dmidx, /typing). Demo-money Send in DMs, Top up on Home, hero + quick actions. Needs LIVE_URL in config.js. Demo money only.
+
+## Elite layer (elite.js / elite.css)
+Bottom tab bar (phones), floating SOS, splash, Challenges & badges (More > Challenges), ride chat rooms (Rides page), online presence dots, admin stats. All data on the same Firebase server.
+
+## Extra layer (extra.js / extra.css)
+Wallet card + QR (My QR, Scan to pay, DEMO money), voice messages in chat (🎤), ride summary image (Share) after a ride. Server: same Firebase (/px, /ridelog, chat paths).
