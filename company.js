@@ -12,12 +12,12 @@ let mr=null,R=null,RT='',peer=null,sig='',tm=null,lastTy=0,reply=null,idxT=null;
 const seen=()=>{try{return JSON.parse(localStorage.getItem('pb_seen')||'{}')}catch(e){return{}}},mark=k=>{const s=seen();s[k]=Date.now();try{localStorage.setItem('pb_seen',JSON.stringify(s))}catch(e){}};
 
 /* ---------- demo wallet (same /px ledger as Wallet & Pay) ---------- */
-const bal=async id=>Math.round(Object.values(await J('/px/txs/'+id)||{}).reduce((n,x)=>n+(x.a>0&&x.a<1e9?(x.y=='in'?x.a:-x.a):0),0)*100)/100;
+const bal=async id=>Math.round(Object.values(await J('/px/txs/'+id)||{}).reduce((n,x)=>n+(x.a>0&&x.a<1e11?(x.y=='in'?x.a:-x.a):0),0)*100)/100;
 async function move(from,to,a,note){const w=await J('/px/wallets/'+from)||{};if(w.frozen)return'Frozen ang wallet mo.';if(w.pin&&w.pin!=prompt('PIN:'))return'Maling PIN.';
- if(!(a>0&&a<=50000))return'Invalid na halaga.';const b=await bal(from);if(b<a)return'Kulang ang balance ('+P(b)+').';
+ if(!(a>0&&a<=5e10))return'Invalid na halaga.';const b=await bal(from);if(b<a)return'Kulang ang balance ('+P(b)+').';
  const t=Date.now();if(await J('/px/txs/'+from+'/'+nid(),'PUT',{t,y:'out',a,m:note})===undefined)return'Hindi na-save. Check ang internet.';
  w.bal=Math.round((b-a)*100)/100;await J('/px/wallets/'+from,'PUT',w);await J('/px/txs/'+to+'/'+nid(),'PUT',{t,y:'in',a,m:note});const w2=await J('/px/wallets/'+to)||{};w2.bal=await bal(to);await J('/px/wallets/'+to,'PUT',w2);return''}
-async function topup(){const u=U();if(!u)return auth('login');if(await bal(u.id)>=20000)return toast('Mataas na ang demo balance.');
+async function topup(){const u=U();if(!u)return auth('login');if(await bal(u.id)>=5e10)return toast('Mataas na ang demo balance.');
  const t=Date.now();await J('/px/txs/'+u.id+'/'+nid(),'PUT',{t,y:'in',a:500,m:'Demo top-up'});const w=await J('/px/wallets/'+u.id)||{};w.bal=await bal(u.id);await J('/px/wallets/'+u.id,'PUT',w);toast('+₱500 DEMO money added');fillHero()}
 async function sendMoney(to,name){const u=U(),a=parseFloat(prompt('Send DEMO money to '+(name||'user')+' (₱):','100'));if(!(a>0))return;
  const e=await move(u.id,to,a,'Sent to '+(name||'user'));if(e)return toast(e);await post({x:'💸 Sent '+P(a)+' (demo)',pay:a});toast('Naipadala ang '+P(a));fillHero()}
