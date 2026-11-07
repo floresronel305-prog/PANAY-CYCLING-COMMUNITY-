@@ -1,6 +1,8 @@
 {
   "rules": {
     ".read": true,
-    ".write": true
+    ".write": true,
+    "dm": {"$p": {"$m": {".validate": "newData.hasChildren(['u','t']) || !newData.exists()"}}},
+    "typing": {".indexOn": []}
   }
 }

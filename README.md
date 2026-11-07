@@ -38,3 +38,6 @@ admin@panaybike.ph / admin123. Log in once right after connecting the server and
 
 ## Ultra AR (ultra.js / ultra.css)
 10 browser AR features under the **Ultra** tab. Camera, GPS and compass require HTTPS and permission.
+
+## Company layer (company.js / company.css)
+Inbox tab: General/Rides/Marketplace rooms + private DMs stored on Firebase (/chat, /rooms, /dm, /dmidx, /typing). Demo-money Send in DMs, Top up on Home, hero + quick actions. Needs LIVE_URL in config.js. Demo money only.
